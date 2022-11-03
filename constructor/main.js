@@ -5,7 +5,7 @@ function Clock(options) {
     this.$minutes = element.querySelector('.minutes');
     this.$seconds = element.querySelector('.seconds');
 
-    this.timer;
+    this.timer=undefined;
 
     let start = this.start.bind(this);
     let stop = this.stop.bind(this);
@@ -19,27 +19,29 @@ Clock.prototype.setTime = function() {
 
     let hours = date.getHours();
     if (hours < 10) {hours = '0' + hours};
-    this.$hours.innerHTML = hours;
+    this.$hours.innerHTML = hours.toString();
 
     let minutes = date.getMinutes();
     if (minutes < 10) {minutes = '0' + minutes};
-    this.$minutes.innerHTML = minutes;
+    this.$minutes.innerHTML = minutes.toString();
 
     let seconds = date.getSeconds();
     if (seconds < 10) {seconds = '0' + seconds};
-    this.$seconds.innerHTML = seconds;
+    this.$seconds.innerHTML = seconds.toString();
 };
 
 Clock.prototype.start = function() {
-    let setTime = this.setTime.bind(this);
-    setTime();
-    this.timer = setInterval(function() {
-        setTime();
-    }, 1000);
+    if (!this.timer){
+        this.setTime();
+        this.timer = setInterval(() =>{
+            this.setTime();
+        }, 1000);
+    }
 };
 
 Clock.prototype.stop = function() {
     clearInterval(this.timer);
+    this.timer=undefined;
 };
 
 let clockOptions = { element: document.querySelector('.clock') };
